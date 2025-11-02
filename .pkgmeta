@@ -1,0 +1,6 @@
+package-as: BentoAuctionUtility
+
+ignore:
+  - .gitignore
+  - .pkgmeta
+  - README.md
