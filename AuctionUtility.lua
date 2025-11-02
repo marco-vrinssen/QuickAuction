@@ -79,15 +79,15 @@ eventFrame:RegisterEvent("AUCTION_HOUSE_CLOSED")
 
 eventFrame:SetScript("OnEvent", function(_, event, ...)
 	-- Initialize databases when addon loads
-	if event == "ADDON_LOADED" and ... == "BentoAuctionUtility" then
+	if event == "ADDON_LOADED" and ... == "AuctionUtility" then
 		eventFrame:UnregisterEvent("ADDON_LOADED")
 
-		BentoAuctionFavoritesDB = BentoAuctionFavoritesDB or {}
-		accountFavorites = BentoAuctionFavoritesDB
+		AuctionFavoritesDB = AuctionFavoritesDB or {}
+		accountFavorites = AuctionFavoritesDB
 		accountFavorites.favorites = accountFavorites.favorites or {}
 
-		BentoAuctionFavoritesCharDB = BentoAuctionFavoritesCharDB or {}
-		characterFavorites = BentoAuctionFavoritesCharDB
+		AuctionFavoritesCharDB = AuctionFavoritesCharDB or {}
+		characterFavorites = AuctionFavoritesCharDB
 		characterFavorites.favorites = characterFavorites.favorites or {}
 
 		-- Register search result events for first-time sync on this character

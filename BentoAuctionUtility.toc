@@ -1,9 +1,0 @@
-## Interface: 110200
-## Title: Bento Auction Utility
-## Notes: Filters auction house to current expansion and syncs favorites across characters
-## Author: MIYANKO
-## Version: 1.0.0
-## SavedVariables: BentoAuctionFavoritesDB
-## SavedVariablesPerCharacter: BentoAuctionFavoritesCharDB
-
-BentoAuctionUtility.lua
