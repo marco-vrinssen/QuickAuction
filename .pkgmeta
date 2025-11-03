@@ -1,0 +1,35 @@
+# CurseForge packaging configuration
+# This file is used by CurseForge to package and distribute the addon
+
+package-as: AuctionAndy
+
+# Ignore files that shouldn't be packaged
+ignore:
+  - .git
+  - .gitignore
+  - .DS_Store
+  - README.md
+
+# Enable automatic changelog generation from git tags
+enable-nolib-creation: no
+
+# Manual changelog (optional - can also be auto-generated from git commits)
+# manual-changelog: |
+#   Version 1.0.0:
+#   - Initial release
+
+# Move files to different locations (if needed)
+# move-folders:
+#   AuctionAndy/Libs: libs
+
+# External dependencies (if any)
+# externals:
+#   libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
+
+# Optional: Define required dependencies
+# required-dependencies:
+#   - lib-stub
+
+# Optional: Define optional dependencies
+# optional-dependencies:
+#   - some-other-addon
