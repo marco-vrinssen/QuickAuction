@@ -1,13 +1,12 @@
 # Quick Auction
 
-World of Warcraft Retail addon for quick auction house posting at market value with automatic quantity tracking.
+World of Warcraft Retail addon with quality-of-life features for the auction house.
 
 ## Features
 
-- Shift+click items in your bags to post them at 70% of market value
-- Automatically calculates pricing based on current auction house data
-- Tracks quantity of items posted per session
-- Simple one-click posting without complicated configuration
+- **Spacebar Posting** - Press spacebar to quickly post auctions without clicking the button
+- **Favorites Sync** - Syncs auction house favorites across all characters on your account
+- **Expansion Filter** - Automatically checks "Current Expansion Only" filter on searches
 
 ## Compatibility
 

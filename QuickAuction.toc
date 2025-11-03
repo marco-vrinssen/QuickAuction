@@ -1,7 +1,11 @@
 ## Interface: 110200
 ## Title: Quick Auction
-## Notes: Shift+click to post items at 70% market value with auto-quantity tracking
+## Notes: Spacebar posting, favorites sync, and expansion filter for auction house
 ## Author: MIYANKO
 ## Version: 1.0.0
+## SavedVariables: AuctionFavoritesDB
+## SavedVariablesPerCharacter: AuctionFavoritesCharDB
 
-QuickAuction.lua
+ExpansionFilter.lua
+FavoritesSync.lua
+SpacebarPost.lua
