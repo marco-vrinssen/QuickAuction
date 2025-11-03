@@ -38,9 +38,9 @@ local function sync(itemKey)
 	C_AuctionHouse.SetFavoriteItem(itemKey, shouldBeFavorited)
 
 	if shouldBeFavorited then
-		print("[Auction Favorites]: |cff00ff00[+]|r " .. getItemLink(itemKey))
+		print("[Auction Favorites]: |cff00ff00●|r " .. getItemLink(itemKey))
 	else
-		print("[Auction Favorites]: |cffff0000[-]|r " .. getItemLink(itemKey))
+		print("[Auction Favorites]: |cffff0000●|r " .. getItemLink(itemKey))
 	end
 
 	return true
@@ -100,7 +100,7 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 		else
 			for _, itemKey in pairs(gdb.favorites) do
 				C_AuctionHouse.SetFavoriteItem(itemKey, true)
-				print("[Auction Favorites]: |cff00ff00[+]|r " .. getItemLink(itemKey))
+				print("[Auction Favorites]: |cff00ff00●|r " .. getItemLink(itemKey))
 				needRefresh = true
 			end
 		end
