@@ -1,0 +1,7 @@
+## Interface: 110200
+## Title: Quick Auction
+## Notes: Shift+click to post items at 70% market value with auto-quantity tracking
+## Author: MIYANKO
+## Version: 1.0.0
+
+QuickAuction.lua
