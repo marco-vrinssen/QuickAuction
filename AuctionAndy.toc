@@ -1,5 +1,5 @@
 ## Interface: 110200
-## Title: Quick Auction
+## Title: Auction Andy
 ## Notes: Spacebar posting, favorites sync, and expansion filter for auction house
 ## Author: MIYANKO
 ## Version: 1.0.0

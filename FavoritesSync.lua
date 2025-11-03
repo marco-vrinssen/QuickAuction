@@ -1,10 +1,9 @@
 -- Syncs auction house favorites across all characters on the account
 
-local accountFavorites
-local characterFavorites
+local gdb, cdb
 
 -- Creates a unique hash from item key properties for storage and comparison
-local function createItemKeyHash(itemKey)
+local function serializeValues(itemKey)
 	local keys, values = {}, {}
 	for k in pairs(itemKey) do table.insert(keys, k) end
 	table.sort(keys)
@@ -12,28 +11,51 @@ local function createItemKeyHash(itemKey)
 	return table.concat(values, "-")
 end
 
--- Syncs item favorite status between account and character databases
-local function syncFavorite(itemKey)
-	local itemKeyHash = createItemKeyHash(itemKey)
+-- Gets item link from item key for chat messages with tooltips
+local function getItemLink(itemKey)
+	local itemID = itemKey.itemID
+	if itemID then
+		local itemName, itemLink = C_Item.GetItemInfo(itemID)
+		if itemLink then
+			return itemLink
+		end
+		if itemName then
+			return itemName
+		end
+	end
+	return "Unknown Item"
+end
 
-	if not accountFavorites.favorites[itemKeyHash] == not characterFavorites.favorites[itemKeyHash] then
+-- Syncs item favorite status between account and character databases
+local function sync(itemKey)
+	local key = serializeValues(itemKey)
+
+	if not gdb.favorites[key] == not cdb.favorites[key] then
 		return false
 	end
 
-	C_AuctionHouse.SetFavoriteItem(itemKey, accountFavorites.favorites[itemKeyHash] ~= nil)
+	local shouldBeFavorited = gdb.favorites[key] ~= nil
+	C_AuctionHouse.SetFavoriteItem(itemKey, shouldBeFavorited)
+
+	if shouldBeFavorited then
+		print("[Auction Favorites]: |cff00ff00+|r " .. getItemLink(itemKey))
+	else
+		print("[Auction Favorites]: |cffff0000-|r " .. getItemLink(itemKey))
+	end
+
 	return true
 end
 
 -- Saves item favorite status to both account and character databases
-local function saveFavorite(itemKey, isFavorited)
-	local itemKeyHash = createItemKeyHash(itemKey)
+local function setFavorite(itemKey, isFavorited)
+	local key = serializeValues(itemKey)
 
-	accountFavorites.favorites[itemKeyHash] = isFavorited and itemKey or nil
-	characterFavorites.favorites[itemKeyHash] = isFavorited and itemKey or nil
+	gdb.favorites[key] = isFavorited and itemKey or nil
+	cdb.favorites[key] = isFavorited and itemKey or nil
 end
 
 -- Hooks into auction house API to intercept favorite changes
-hooksecurefunc(C_AuctionHouse, "SetFavoriteItem", saveFavorite)
+hooksecurefunc(C_AuctionHouse, "SetFavoriteItem", setFavorite)
 
 local eventFrame = CreateFrame("Frame")
 
@@ -43,19 +65,19 @@ eventFrame:RegisterEvent("AUCTION_HOUSE_CLOSED")
 
 eventFrame:SetScript("OnEvent", function(_, event, ...)
 	-- Initialize databases when addon loads
-	if event == "ADDON_LOADED" and ... == "QuickAuction" then
+	if event == "ADDON_LOADED" and ... == "AuctionAndy" then
 		eventFrame:UnregisterEvent("ADDON_LOADED")
 
 		AuctionFavoritesDB = AuctionFavoritesDB or {}
-		accountFavorites = AuctionFavoritesDB
-		accountFavorites.favorites = accountFavorites.favorites or {}
+		gdb = AuctionFavoritesDB
+		gdb.favorites = gdb.favorites or {}
 
 		AuctionFavoritesCharDB = AuctionFavoritesCharDB or {}
-		characterFavorites = AuctionFavoritesCharDB
-		characterFavorites.favorites = characterFavorites.favorites or {}
+		cdb = AuctionFavoritesCharDB
+		cdb.favorites = cdb.favorites or {}
 
 		-- Register search result events for first-time sync on this character
-		if not characterFavorites.synced then
+		if not cdb.synced then
 			eventFrame:RegisterEvent("AUCTION_HOUSE_BROWSE_RESULTS_UPDATED")
 			eventFrame:RegisterEvent("AUCTION_HOUSE_BROWSE_RESULTS_ADDED")
 			eventFrame:RegisterEvent("COMMODITY_SEARCH_RESULTS_UPDATED")
@@ -67,35 +89,36 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 
 	-- Sync favorites when auction house opens
 	if event == "AUCTION_HOUSE_SHOW" then
-		local shouldRefreshSearch = false
+		local needRefresh = false
 
-		if characterFavorites.synced then
-			for _, favorites in ipairs { accountFavorites.favorites, characterFavorites.favorites } do
+		if cdb.synced then
+			for _, favorites in ipairs { gdb.favorites, cdb.favorites } do
 				for _, itemKey in pairs(favorites) do
-					shouldRefreshSearch = syncFavorite(itemKey) or shouldRefreshSearch
+					needRefresh = sync(itemKey) or needRefresh
 				end
 			end
 		else
-			for _, itemKey in pairs(accountFavorites.favorites) do
+			for _, itemKey in pairs(gdb.favorites) do
 				C_AuctionHouse.SetFavoriteItem(itemKey, true)
-				shouldRefreshSearch = true
+				print("[Auction Favorites]: |cff00ff00+|r " .. getItemLink(itemKey))
+				needRefresh = true
 			end
 		end
 
-		if shouldRefreshSearch then
+		if needRefresh then
 			C_AuctionHouse.SearchForFavorites({})
 		end
 	end
 
 	-- Mark character as synced and cleanup when auction house closes
 	if event == "AUCTION_HOUSE_CLOSED" then
-		characterFavorites.synced = true
+		cdb.synced = true
 		eventFrame:UnregisterAllEvents()
 	end
 
 	-- Processes search results and saves favorite status for discovered items
 	local function processItemKey(itemKey)
-		saveFavorite(itemKey, C_AuctionHouse.IsFavoriteItem(itemKey))
+		setFavorite(itemKey, C_AuctionHouse.IsFavoriteItem(itemKey))
 	end
 
 	if event == "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED" then

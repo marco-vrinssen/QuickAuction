@@ -1,4 +1,4 @@
-# Quick Auction
+# Auction Andy
 
 World of Warcraft Retail addon with quality-of-life features for the auction house.
 
