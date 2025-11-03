@@ -1,19 +1,15 @@
-# Bento Auction Utility
+# Quick Auction
 
-Quality of life improvements for the World of Warcraft auction house.
+World of Warcraft Retail addon for quick auction house posting at market value with automatic quantity tracking.
 
 ## Features
 
-- **Current Expansion Filter** - Automatically filters auction house searches to show only current expansion items
-- **Favorites Sync** - Syncs auction house favorites across all characters on your account
-- **Quick Post** - Press spacebar to quickly post auctions without clicking the button
+- Shift+click items in your bags to post them at 70% of market value
+- Automatically calculates pricing based on current auction house data
+- Tracks quantity of items posted per session
+- Simple one-click posting without complicated configuration
 
-## Installation
+## Compatibility
 
-1. Download the addon
-2. Extract to `World of Warcraft/_retail_/Interface/AddOns/`
-3. Restart WoW or reload UI with `/reload`
-
-## Usage
-
-The addon works automatically once installed. Open the auction house and your favorites will be synced across characters. Use spacebar to post items when in the sell tab.
+- **Interface Version**: 11.2.0 (The War Within)
+- **Game Version**: World of Warcraft Retail
