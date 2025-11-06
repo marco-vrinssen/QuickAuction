@@ -1,25 +1,25 @@
--- Auto-checks current expansion filter on auction house searches
+-- Auto-checks current expansion filter on auction house and crafting order searches
 
-local function setExpansionFilter()
-  local searchBar = AuctionHouseFrame and AuctionHouseFrame.SearchBar
-  local filterButton = searchBar and searchBar.FilterButton
-  if not filterButton then return end
-
-  filterButton.filters = filterButton.filters or {}
-  filterButton.filters[Enum.AuctionHouseFilter.CurrentExpansionOnly] = true
-  searchBar:UpdateClearFiltersButton()
-end
-
-local function hookSearchBar()
-  local searchBar = AuctionHouseFrame and AuctionHouseFrame.SearchBar
-  if not searchBar then return end
-
-  if not searchBar.hooked then
-    searchBar:HookScript("OnShow", setExpansionFilter)
-    searchBar.hooked = true
+local function setAuctionHouseExpansionFilter()
+  if AUCTION_HOUSE_DEFAULT_FILTERS then
+    AUCTION_HOUSE_DEFAULT_FILTERS[Enum.AuctionHouseFilter.CurrentExpansionOnly] = true
   end
 end
 
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("AUCTION_HOUSE_SHOW")
-eventFrame:SetScript("OnEvent", hookSearchBar)
+local function setCraftingOrderExpansionFilter()
+  if AUCTION_HOUSE_DEFAULT_FILTERS then
+    AUCTION_HOUSE_DEFAULT_FILTERS[Enum.AuctionHouseFilter.CurrentExpansionOnly] = true
+  end
+end
+
+local filterFrame = CreateFrame("Frame")
+filterFrame:RegisterEvent("ADDON_LOADED")
+filterFrame:SetScript("OnEvent", function(self, event, name)
+  if name == "Blizzard_AuctionHouseUI" then
+    setAuctionHouseExpansionFilter()
+  end
+  
+  if name == "Blizzard_ProfessionsCustomerOrders" then
+    setCraftingOrderExpansionFilter()
+  end
+end)
