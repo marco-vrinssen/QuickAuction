@@ -1,14 +1,9 @@
 # Auction Andy
 
-World of Warcraft Retail addon with quality-of-life features for the auction house.
+World of Warcraft addon with quality-of-life features for the auction house.
 
 ## Features
 
-- **Spacebar Posting** - Press spacebar to quickly post auctions without clicking the button
-- **Favorites Sync** - Syncs auction house favorites across all characters on your account
-- **Expansion Filter** - Automatically checks "Current Expansion Only" filter on searches
-
-## Compatibility
-
-- **Interface Version**: 11.2.0 (The War Within)
-- **Game Version**: World of Warcraft Retail
+- Posts auctions with spacebar press
+- Syncs favorites across all characters
+- Auto-enables current expansion filter on auction house and crafting order searches
