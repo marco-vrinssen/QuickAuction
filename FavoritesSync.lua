@@ -184,8 +184,14 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 					needsRefresh = syncFavoriteItem(itemKey) or needsRefresh
 				end
 			end
-		-- First time sync: apply all account favorites to this character
+		-- First time sync: copy account favorites to character without overwriting account DB
 		else
+			-- Copy all account favorites to this character's database first
+			for serializedKey, itemKey in pairs(accountDatabase.favorites) do
+				characterDatabase.favorites[serializedKey] = itemKey
+			end
+			
+			-- Then apply them to the auction house UI
 			for _, itemKey in pairs(accountDatabase.favorites) do
 				C_AuctionHouse.SetFavoriteItem(itemKey, true)
 				needsRefresh = true
